@@ -29,6 +29,8 @@ type Client interface {
 	GetBuildTypes() ([]BuildType, error)
 	// Get list of build types for a project
 	GetBuildTypesForProject(id string) ([]BuildType, error)
+	// Get statistics for last build
+	GetBuildTypeStatistics(id int) (BuildStatistics, error)
 
 	// Get build by its ID
 	GetBuildByID(id int) (Build, error)
@@ -49,6 +51,8 @@ type Client interface {
 	GetChangesForBuildTypeSinceChange(btId string, cId int) ([]Change, error)
 	// Get pending changes for build type
 	GetChangesForBuildTypePending(id string) ([]Change, error)
+
+	GetServerLicensingData() (*ServerLicensingData, error)
 }
 
 // Project is a TeamCity project

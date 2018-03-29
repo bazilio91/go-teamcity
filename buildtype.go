@@ -56,3 +56,19 @@ func (c client) GetBuildTypesForProject(id string) ([]BuildType, error) {
 	debugf("GetBuildTypesForProject('%s'): OK", id)
 	return list.BuildTypes, nil
 }
+
+type BuildStatistics struct {
+	Properties []map[string]interface{} `json:"property"`
+}
+
+func (c client) GetBuildTypeStatistics(id int) (BuildStatistics, error) {
+	response := BuildStatistics{}
+	err := c.httpGet(fmt.Sprintf("/builds/%v/statistics", id), &url.Values{}, &response)
+
+	if err != nil {
+		errorf("BuildStatistics('%s') failed with %s", id, err)
+		return response, err
+	}
+
+	return response, err
+}
