@@ -6,13 +6,16 @@ import (
 )
 
 type buildListItem struct {
-	ID          int    `json:"id"`
-	Number      string `json:"number"`
-	Status      string `json:"status"`
-	StatusText  string `json:"statusText"`
-	Running     bool   `json:"running"`
-	Progress    int    `json:"percentageComplete"`
-	BuildTypeID string `json:"buildTypeId"`
+	ID            int    `json:"id"`
+	Number        string `json:"number"`
+	Status        string `json:"status"`
+	StatusText    string `json:"statusText"`
+	Running       bool   `json:"running"`
+	Progress      int    `json:"percentageComplete"`
+	BuildTypeID   string `json:"buildTypeId"`
+	QueuedDateRaw string `json:"queuedDate"`
+	StartDateRaw  string `json:"startDate"`
+	FinishDateRaw string `json:"finishDate"`
 }
 
 type buildList struct {
@@ -59,7 +62,7 @@ func (c client) GetBuildsForBuildType(id string, count int) ([]Build, error) {
 	debugf("GetBuildsForBuildType('%s', %d)", id, count)
 	args := url.Values{}
 	args.Set("locator", fmt.Sprintf("buildType:%s,count:%d,running:any", url.QueryEscape(id), count))
-	args.Set("fields", "build(id,number,status,state,buildTypeId,statusText,running,percentageComplete)")
+	args.Set("fields", "build(id,number,status,state,buildTypeId,statusText,running,percentageComplete,queuedDate,startDate,finishDate)")
 
 	var list buildList
 	err := c.httpGet("/builds", &args, &list)
@@ -81,12 +84,15 @@ func createBuildFromJSON(item buildListItem) Build {
 	}
 
 	return Build{
-		ID:          item.ID,
-		Number:      item.Number,
-		Status:      status,
-		StatusText:  item.StatusText,
-		Progress:    item.Progress,
-		BuildTypeID: item.BuildTypeID,
+		ID:            item.ID,
+		Number:        item.Number,
+		Status:        status,
+		StatusText:    item.StatusText,
+		Progress:      item.Progress,
+		BuildTypeID:   item.BuildTypeID,
+		StartDateRaw:  item.StartDateRaw,
+		QueuedDateRaw: item.QueuedDateRaw,
+		FinishDateRaw: item.FinishDateRaw,
 	}
 }
 

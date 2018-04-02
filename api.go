@@ -1,6 +1,9 @@
 package teamcity
 
-import "net/url"
+import (
+	"net/url"
+	"time"
+)
 
 // Authorizer is a TeamCity client authorizer
 type Authorizer interface {
@@ -96,6 +99,8 @@ const (
 	StatusFailure
 )
 
+const DATE_LAYOUT = "20060102T150405-0700"
+
 // Build is a TeamCity project build
 type Build struct {
 	// Build ID
@@ -110,6 +115,22 @@ type Build struct {
 	Progress int `json:"progress"`
 	// Build type ID
 	BuildTypeID string `json:"buildTypeId"`
+	// Build start time
+	QueuedDateRaw string `json:"queuedDate"`
+	StartDateRaw  string `json:"startDate"`
+	FinishDateRaw string `json:"finishDate"`
+}
+
+func (b Build) QueuedDate() (time.Time, error) {
+	return time.Parse(DATE_LAYOUT, b.QueuedDateRaw)
+}
+
+func (b Build) StartDate() (time.Time, error) {
+	return time.Parse(DATE_LAYOUT, b.StartDateRaw)
+}
+
+func (b Build) FinishDate() (time.Time, error) {
+	return time.Parse(DATE_LAYOUT, b.FinishDateRaw)
 }
 
 // Change is a TeamCity project change
