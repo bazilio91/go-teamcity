@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
+	"github.com/sirupsen/logrus"
 )
 
 type client struct {
@@ -127,10 +127,10 @@ func (a basicAuthorizer) GetUserInfo() *url.Userinfo {
 
 func errorf(format string, v ...interface{}) {
 	msg := fmt.Sprintf(format, v...)
-	log.Printf("[go-teamcity] ERROR! %s", msg)
+	logrus.Errorf("[go-teamcity] ERROR! %s", msg)
 }
 
 func debugf(format string, v ...interface{}) {
 	msg := fmt.Sprintf(format, v...)
-	log.Printf("[go-teamcity] %s", msg)
+	logrus.Debugf("[go-teamcity] %s", msg)
 }
