@@ -190,6 +190,8 @@ type UserGroup struct {
 	// Group name
 	Name string `json:"name"`
 
+	Description string `json:"description"`
+
 	ParentGroups []UserGroup `json:"parent-groups"`
 
 	Users []User `json:"users"`
