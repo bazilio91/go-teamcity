@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/sirupsen/logrus"
 )
 
@@ -81,6 +82,8 @@ func (c client) httpGet(uri string, query *url.Values, result interface{}) error
 		errorf("GET %s failed with %s (unable to read response)", uri, err)
 		return err
 	}
+
+	spew.Dump(string(body))
 
 	err = json.Unmarshal(body, &result)
 	if err != nil {
