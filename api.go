@@ -55,6 +55,12 @@ type Client interface {
 	// Get pending changes for build type
 	GetChangesForBuildTypePending(id string) ([]Change, error)
 
+	GetUserGroups() ([]UserGroup, error)
+	CreateUserGroup(UserGroup) (*UserGroup, error)
+
+	GetUser(userLocator string) (*User, error)
+	UpdateUserGroups(userLocator string, groups []UserGroup) ([]UserGroup, error)
+
 	GetServerLicensingData() (*ServerLicensingData, error)
 }
 
@@ -143,4 +149,50 @@ type Change struct {
 	Username string `json:"username"`
 	// Change date
 	Date string `json:"date"`
+}
+
+type User struct {
+	LastLogin   string      `json:"lastLogin"`
+	Roles       []Role      `json:"roles"`
+	Groups      []UserGroup `json:"groups"`
+	HasPassword bool        `json:"hasPassword"`
+	Password    string      `json:"password"`
+	Name        string      `json:"name"`
+	Realm       string      `json:"realm"`
+	ID          int         `json:"id"`
+	Href        string      `json:"href"`
+	Locator     string      `json:"locator"`
+	Email       string      `json:"email"`
+	Properties  struct {
+		Count    int `json:"count"`
+		Property []struct {
+			Inherited bool   `json:"inherited"`
+			Name      string `json:"name"`
+			Type      struct {
+				RawValue string `json:"rawValue"`
+			} `json:"type"`
+			Value string `json:"value"`
+		} `json:"property"`
+		Href string `json:"href"`
+	} `json:"properties"`
+	Username string `json:"username"`
+}
+
+type Role struct {
+	RoleID string `json:"roleId"`
+	Scope  string `json:"scope"`
+	Href   string `json:"href"`
+}
+
+type UserGroup struct {
+	// Group id
+	Key int `json:"key"`
+	// Group name
+	Name string `json:"name"`
+
+	ParentGroups []UserGroup `json:"parent-groups"`
+
+	Users []User `json:"users"`
+
+	Roles []Role `json:"roles"`
 }

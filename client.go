@@ -1,12 +1,14 @@
 package teamcity
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+
 	"github.com/sirupsen/logrus"
 )
 
@@ -83,6 +85,70 @@ func (c client) httpGet(uri string, query *url.Values, result interface{}) error
 	err = json.Unmarshal(body, &result)
 	if err != nil {
 		errorf("GET %s failed with %s (malformed response)", uri, err)
+		return err
+	}
+
+	/*
+		session := &napping.Session{}
+		session.Header = &http.Header{}
+		session.Header.Set("Accept", "application/json")
+		session.Userinfo = c.userInfo
+
+		response, err := session.Get(c.url+uri, query, &result, nil)
+		if err != nil {
+			errorf("GET %s failed with %s", uri, err)
+			return err
+		}
+
+		debugf("GET %s -> %d", response.Url, response.Status())*/
+	return nil
+}
+
+func (c client) httpPost(uri string, query *url.Values, requestData interface{}, result interface{}) error {
+	uri = c.url + uri
+	if query != nil {
+		uri = uri + "?" + query.Encode()
+	}
+
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(requestData)
+	if err != nil {
+		return err
+	}
+
+	request, err := http.NewRequest("POST", uri, buf)
+	if err != nil {
+		errorf("POST %s failed with %s (unable to create HTTP request)", uri, err)
+		return err
+	}
+
+	request.Header.Set("Content-Type", "application/json; charset=utf-8")
+	request.Header.Set("Accept", "application/json")
+
+	if c.userInfo != nil {
+		username := c.userInfo.Username()
+		password, _ := c.userInfo.Password()
+		request.SetBasicAuth(username, password)
+	}
+
+	response, err := c.c.Do(request)
+	if err != nil {
+		errorf("POST %s failed with %s", uri, err)
+		return err
+	}
+
+	defer response.Body.Close()
+	debugf("POST %s -> %s", uri, response.Status)
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		errorf("POST %s failed with %s (unable to read response)", uri, err)
+		return err
+	}
+
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		errorf("POST %s failed with %s (malformed response)", uri, err)
 		return err
 	}
 

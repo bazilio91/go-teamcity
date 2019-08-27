@@ -66,7 +66,7 @@ func (c client) GetBuildTypeStatistics(id int) (BuildStatistics, error) {
 	err := c.httpGet(fmt.Sprintf("/builds/%v/statistics", id), &url.Values{}, &response)
 
 	if err != nil {
-		errorf("BuildStatistics('%s') failed with %s", id, err)
+		errorf("BuildStatistics('%v') failed with %s", id, err)
 		return response, err
 	}
 

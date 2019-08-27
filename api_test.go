@@ -3,7 +3,7 @@ package teamcity_test
 import (
 	"testing"
 
-	. "github.com/kapitanov/go-teamcity"
+	. "github.com/bazilio91/go-teamcity"
 )
 
 const (
