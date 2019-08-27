@@ -152,10 +152,15 @@ type Change struct {
 	Date string `json:"date"`
 }
 
+type UserField struct {
+	Count int    `json:"count"`
+	User  []User `json:"user"`
+}
+
 type User struct {
 	LastLogin   string      `json:"lastLogin"`
-	Roles       []Role      `json:"roles"`
-	Groups      []UserGroup `json:"groups"`
+	Roles       RoleField      `json:"roles"`
+	Groups      UserGroupField `json:"groups"`
 	HasPassword bool        `json:"hasPassword"`
 	Password    string      `json:"password"`
 	Name        string      `json:"name"`
@@ -204,8 +209,6 @@ type UserGroup struct {
 	Description string `json:"description"`
 
 	ParentGroups UserGroupField `json:"parent-groups"`
-
-	//Users []User `json:"users"`
-	//
-	Roles RoleField `json:"roles"`
+	Users        UserField      `json:"users"`
+	Roles        RoleField      `json:"roles"`
 }
