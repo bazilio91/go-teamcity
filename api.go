@@ -55,6 +55,7 @@ type Client interface {
 	// Get pending changes for build type
 	GetChangesForBuildTypePending(id string) ([]Change, error)
 
+	GetUserGroup(key string) (*UserGroup, error)
 	GetUserGroups() ([]UserGroup, error)
 	CreateUserGroup(UserGroup) (*UserGroup, error)
 
