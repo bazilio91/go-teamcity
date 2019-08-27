@@ -13,7 +13,7 @@ func (c client) GetUserGroups() ([]UserGroup, error) {
 	response := getUserGroupsJson{}
 
 	args := url.Values{}
-	args.Set("fields", "userGroup(key,name,parentGroups,users,roles)")
+	args.Set("fields", "group(key,name,description,parent-groups,users,roles)")
 
 	err := c.httpGet("/userGroups", &args, &response)
 	if err != nil {
@@ -27,7 +27,7 @@ func (c client) GetUserGroups() ([]UserGroup, error) {
 func (c client) GetUserGroup(key string) (*UserGroup, error) {
 	var response *UserGroup
 	args := url.Values{}
-	args.Set("fields", "userGroup(key,name,parentGroups,users,roles)")
+	args.Set("fields", "group(key,name,description,parent-groups,users,roles)")
 
 	err := c.httpGet(fmt.Sprintf("/userGroups/key:%s", key), &args, &response)
 	if err != nil {
