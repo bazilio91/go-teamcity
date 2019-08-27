@@ -60,7 +60,7 @@ type Client interface {
 	CreateUserGroup(UserGroup) (*UserGroup, error)
 
 	GetUser(userLocator string) (*User, error)
-	UpdateUserGroups(userLocator string, group UserGroup) ([]UserGroup, error)
+	AddGroupToUser(userLocator string, group UserGroup) (*UserGroup, error)
 
 	GetServerLicensingData() (*ServerLicensingData, error)
 }
