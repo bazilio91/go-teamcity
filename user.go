@@ -1,7 +1,9 @@
 package teamcity
 
-import "fmt"
-
+import (
+	"fmt"
+	"net/url"
+)
 
 type getUserGroupsJson struct {
 	Items []UserGroup `json:"group"`
@@ -9,7 +11,11 @@ type getUserGroupsJson struct {
 
 func (c client) GetUserGroups() ([]UserGroup, error) {
 	response := getUserGroupsJson{}
-	err := c.httpGet("/userGroups", nil, &response)
+
+	args := url.Values{}
+	args.Set("fields", "userGroup(key,name,parentGroups,users,roles)")
+
+	err := c.httpGet("/userGroups", &args, &response)
 	if err != nil {
 		errorf("GetUserGroups failed with %s", err)
 		return nil, err
@@ -18,11 +24,12 @@ func (c client) GetUserGroups() ([]UserGroup, error) {
 	return response.Items, nil
 }
 
-
-
 func (c client) GetUserGroup(key string) (*UserGroup, error) {
 	var response *UserGroup
-	err := c.httpGet(fmt.Sprintf("/userGroups/key:%s", key), nil, &response)
+	args := url.Values{}
+	args.Set("fields", "userGroup(key,name,parentGroups,users,roles)")
+
+	err := c.httpGet(fmt.Sprintf("/userGroups/key:%s", key), &args, &response)
 	if err != nil {
 		errorf("GetUserGroup failed with %s", err)
 		return nil, err
