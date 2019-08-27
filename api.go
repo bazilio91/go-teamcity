@@ -179,10 +179,20 @@ type User struct {
 	Username string `json:"username"`
 }
 
+type RoleField struct {
+	Count int    `json:"count"`
+	Role  []Role `json:"role"`
+}
+
 type Role struct {
 	RoleID string `json:"roleId"`
 	Scope  string `json:"scope"`
 	Href   string `json:"href"`
+}
+
+type UserGroupField struct {
+	Count int         `json:"count"`
+	Group []UserGroup `json:"group"`
 }
 
 type UserGroup struct {
@@ -193,9 +203,9 @@ type UserGroup struct {
 
 	Description string `json:"description"`
 
-	ParentGroups []UserGroup `json:"parent-groups"`
+	ParentGroups UserGroupField `json:"parent-groups"`
 
-	Users []User `json:"users"`
-
-	Roles []Role `json:"roles"`
+	//Users []User `json:"users"`
+	//
+	Roles RoleField `json:"roles"`
 }
