@@ -57,9 +57,9 @@ func (c client) GetUser(userLocator string) (*User, error) {
 	return response, nil
 }
 
-func (c client) UpdateUserGroups(userLocator string, groups []UserGroup) ([]UserGroup, error) {
+func (c client) UpdateUserGroups(userLocator string, group UserGroup) ([]UserGroup, error) {
 	var response []UserGroup
-	err := c.httpPost(fmt.Sprintf("/users/%s/groups", userLocator), nil, groups, &response)
+	err := c.httpPost(fmt.Sprintf("/users/%s/groups", userLocator), nil, group, &response)
 	if err != nil {
 		errorf("UpdateUserGroups failed with %s", err)
 		return nil, err
