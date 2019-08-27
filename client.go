@@ -149,6 +149,8 @@ func (c client) httpPost(uri string, query *url.Values, requestData interface{},
 		return err
 	}
 
+	spew.Dump(string(body))
+
 	err = json.Unmarshal(body, &result)
 	if err != nil {
 		errorf("POST %s failed with %s (malformed response)", uri, err)
