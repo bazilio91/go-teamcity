@@ -2,16 +2,23 @@ package teamcity
 
 import "fmt"
 
+
+type getUserGroupsJson struct {
+	Items []UserGroup `json:"group"`
+}
+
 func (c client) GetUserGroups() ([]UserGroup, error) {
-	response := []UserGroup{}
+	response := getUserGroupsJson{}
 	err := c.httpGet("/userGroups", nil, &response)
 	if err != nil {
 		errorf("GetUserGroups failed with %s", err)
 		return nil, err
 	}
 
-	return response, nil
+	return response.Items, nil
 }
+
+
 
 func (c client) GetUserGroup(key string) (*UserGroup, error) {
 	var response *UserGroup
