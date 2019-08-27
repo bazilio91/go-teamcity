@@ -186,7 +186,7 @@ type Role struct {
 
 type UserGroup struct {
 	// Group id
-	Key int `json:"key"`
+	Key string `json:"key"`
 	// Group name
 	Name string `json:"name"`
 
